@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: nexus-supply-backend
+    runtime: python
+    plan: free
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: DATABASE_URL
+        sync: false            # paste your Neon postgresql+asyncpg:// string in dashboard
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ALGORITHM
+        value: HS256
+      - key: ACCESS_TOKEN_EXPIRE_MINUTES
+        value: "1440"
+      - key: ADMIN_USERNAME
+        value: admin
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: CORS_ORIGINS
+        sync: false            # your Vercel URL, e.g. https://nexus-supply.vercel.app
+      - key: AUTO_INIT_DB
+        value: "true"
+      - key: AUTO_SEED
+        value: "true"
