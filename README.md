@@ -15,7 +15,9 @@ Demonstrates ACID transactions, database triggers, table partitioning, and concu
 
 > 🔐 **Demo credentials** — `admin` / `admin123`
 
-</div>
+<img width="1512" height="856" alt="Screenshot 2026-06-19 at 3 43 00 PM" src="https://github.com/user-attachments/assets/5c8e64c5-86a9-48e9-b1d7-8f86116e855f" />
+<img width="1512" height="856" alt="Screenshot 2026-06-19 at 3 42 14 PM" src="https://github.com/user-attachments/assets/94b24479-9195-4768-80f8-209bf6fea00e" />
+<img width="1512" height="856" alt="Screenshot 2026-06-19 at 3 42 34 PM" src="https://github.com/user-attachments/assets/fc5a411d-34ae-47af-a3db-fc437e51d07f" />
 
 ---
 
