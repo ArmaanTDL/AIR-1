@@ -97,11 +97,29 @@ for r in (
     app.include_router(r.router)
 
 
-@app.get("/")
-async def root():
-    return {"service": "TRACKOS API", "status": "online", "docs": "/docs"}
+import os
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 
-
-@app.get("/health")
+@app.get("/api/health")
 async def health():
-    return {"status": "ok"}
+    return {"status": "ok", "service": "TRACKOS API"}
+
+# Serve the built React frontend from the FastAPI backend
+frontend_dist = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../frontend/dist"))
+if os.path.exists(frontend_dist):
+    assets_dir = os.path.join(frontend_dist, "assets")
+    if os.path.exists(assets_dir):
+        app.mount("/assets", StaticFiles(directory=assets_dir), name="assets")
+
+    @app.api_route("/{path_name:path}", methods=["GET"])
+    async def catch_all(path_name: str):
+        # Prevent accessing files outside of frontend_dist
+        file_path = os.path.abspath(os.path.join(frontend_dist, path_name))
+        if file_path.startswith(frontend_dist) and os.path.isfile(file_path):
+            return FileResponse(file_path)
+        return FileResponse(os.path.join(frontend_dist, "index.html"))
+else:
+    @app.get("/")
+    async def root():
+        return {"service": "TRACKOS API", "status": "online", "docs": "/docs", "frontend": "Not Built"}
