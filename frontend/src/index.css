@@ -1,0 +1,91 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: #0C0C0D;
+  color: #f4f4f6;
+  font-family: "Inter", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Smooth Scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Animated particle-grid backdrop with Amber/Orange glows */
+.trackos-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-color: #0C0C0D;
+  background-image:
+    radial-gradient(circle at 15% 15%, rgba(255, 159, 28, 0.03), transparent 45%),
+    radial-gradient(circle at 85% 85%, rgba(255, 69, 0, 0.04), transparent 50%),
+    linear-gradient(rgba(255, 159, 28, 0.01) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 159, 28, 0.01) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 36px 36px, 36px 36px;
+  animation: gridShift 45s linear infinite;
+}
+
+@keyframes gridShift {
+  from { background-position: 0 0, 0 0, 0 0, 0 0; }
+  to { background-position: 0 0, 0 0, 36px 36px, 36px 36px; }
+}
+
+/* Premium Obsidian Glassmorphism */
+.glass {
+  background: rgba(20, 20, 22, 0.65);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.gradient-text {
+  background: linear-gradient(90deg, #FF9F1C, #FF4500);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Sleek Minimalist Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 159, 28, 0.2);
+  border-radius: 8px;
+}
+::-webkit-scrollbar-thumb:hover { background: rgba(255, 159, 28, 0.4); }
+
+/* Premium Input Fields */
+input,
+select,
+textarea {
+  background: rgba(12, 12, 14, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 0.6rem;
+  padding: 0.55rem 0.8rem;
+  color: #f4f4f6;
+  width: 100%;
+  outline: none;
+  transition: border-color 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: #FF9F1C;
+  box-shadow: 0 0 0 2px rgba(255, 159, 28, 0.15);
+}
+label { font-size: 0.78rem; color: #8e8e93; margin-bottom: 0.25rem; display: block; }
