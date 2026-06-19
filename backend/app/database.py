@@ -13,12 +13,31 @@ from sqlalchemy.ext.asyncio import (
 from sqlalchemy.orm import DeclarativeBase
 
 from .config import settings
+from urllib.parse import urlparse, urlunparse, parse_qsl, urlencode
 
 db_url = settings.DATABASE_URL
 if db_url.startswith("postgres://"):
     db_url = db_url.replace("postgres://", "postgresql+asyncpg://", 1)
 elif db_url.startswith("postgresql://"):
     db_url = db_url.replace("postgresql://", "postgresql+asyncpg://", 1)
+
+# Clean up sslmode and channel_binding for asyncpg compatibility
+try:
+    parsed = urlparse(db_url)
+    if "asyncpg" in parsed.scheme:
+        queries = parse_qsl(parsed.query)
+        filtered_queries = [
+            (k, v) for k, v in queries 
+            if k not in ("sslmode", "channel_binding")
+        ]
+        has_ssl = any(k == "sslmode" and v in ("require", "verify-full", "verify-ca") for k, v in queries)
+        if has_ssl:
+            filtered_queries.append(("ssl", "require"))
+        new_query = urlencode(filtered_queries)
+        parsed = parsed._replace(query=new_query)
+        db_url = urlunparse(parsed)
+except Exception:
+    pass
 
 # Neon serverless works best with modest pooling + pre-ping to survive idle drops.
 engine = create_async_engine(
