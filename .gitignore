@@ -1,0 +1,18 @@
+# Python / Backend
+backend/.venv/
+backend/__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.env
+
+# Node / Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.npm/
+
+# OS / Editor
+.DS_Store
+.vscode/
+.claude/
+pyrightconfig.json
