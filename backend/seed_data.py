@@ -10,6 +10,7 @@ import random
 import uuid
 from decimal import Decimal
 
+# pyrefly: ignore [missing-import]
 from sqlalchemy import insert, select, text
 
 from app.database import AsyncSessionLocal, init_db
