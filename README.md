@@ -1,89 +1,319 @@
-# NEXUS SUPPLY — Intelligent Inventory & Supply Chain Platform
+<div align="center">
 
-A full-stack **ADBMS showcase**: a dark, animated inventory dashboard backed by a
-PostgreSQL database that demonstrates **ACID transactions, triggers, table
-partitioning, and concurrency control**.
+<img src="https://img.shields.io/badge/TRACKOS-Inventory%20%26%20Supply%20Chain-00D4FF?style=for-the-badge&labelColor=0A0E1A&color=00D4FF" alt="TRACKOS" height="40"/>
 
-- **Frontend:** React (Vite) · Tailwind CSS · Framer Motion · Recharts · Zustand · Axios
-- **Backend:** FastAPI · SQLAlchemy 2.0 (async) · asyncpg · JWT auth
-- **Database:** PostgreSQL (Neon.tech free tier)
-- **Deploy:** Render (backend) · Vercel (frontend) · Neon (DB) — all free tier
+# TRACKOS — Intelligent Inventory & Supply Chain Platform
 
----
+**A full-stack ADBMS showcase built with React, FastAPI, and PostgreSQL.**  
+Demonstrates ACID transactions, database triggers, table partitioning, and concurrency control — all visualised through a dark, animated dashboard.
 
-## ADBMS concepts (where to see them)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-zesty--sorbet--4b20ed.netlify.app-00D4FF?style=flat-square&logo=netlify&logoColor=white&labelColor=0A0E1A)](https://zesty-sorbet-4b20ed.netlify.app/login)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.111-009688?style=flat-square&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
+[![React](https://img.shields.io/badge/React-18-61DAFB?style=flat-square&logo=react&logoColor=white&labelColor=0A0E1A)](https://react.dev)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Neon-4169E1?style=flat-square&logo=postgresql&logoColor=white)](https://neon.tech)
+[![License](https://img.shields.io/badge/License-MIT-7C3AED?style=flat-square)](LICENSE)
 
-| Concept | Where | Proof in the UI |
-|---|---|---|
-| **ACID transactions** | `POST /inventory/batch-update`, `POST /orders/{id}/fulfill` | **Inventory → Batch Update** animation; **Transaction Log** page |
-| **Triggers** | `sql/schema.sql` (`check_low_stock`, `resolve_low_stock_alert`, `update_inventory_timestamp`) | **Alerts** page (auto-generated rows) |
-| **Partitioning** | `warehouses` & `inventory` LIST-partitioned by region | **Warehouses** page shows each row's physical partition |
-| **Concurrency control** | `SELECT … FOR UPDATE` in `services/transaction.py`; `POST /inventory/demo/concurrent-test` | **Inventory →** 🧪 beaker button fires two concurrent TXs |
+> 🔐 **Demo credentials** — `admin` / `admin123`
+
+</div>
 
 ---
 
-## Full CRUD
+## ✨ Features at a glance
 
-Add / edit / delete is implemented end-to-end for **Products, Suppliers,
-Warehouses, Inventory rows, and Orders** (create + fulfill + delete). All write
-endpoints require a JWT (log in first).
+| Category | What's inside |
+|---|---|
+| 📦 **Products** | Full CRUD — add, edit, delete products with SKU, category, unit price, supplier, and low-stock threshold |
+| 🏭 **Warehouses** | 5 regional warehouses (NORTH · SOUTH · EAST · WEST · CENTRAL), each stored in its own LIST partition |
+| 📋 **Inventory** | Per-warehouse stock levels, colour-coded health indicators, and a **Batch Update** panel with live transaction animation |
+| 🛒 **Orders** | Create orders, fulfil them atomically, track status (PENDING → PROCESSING → COMPLETED / FAILED) |
+| 🤝 **Suppliers** | Manage suppliers with reliability scores |
+| 🚨 **Alerts** | Auto-generated low-stock alerts by a PostgreSQL trigger; acknowledge and auto-resolve on restock |
+| 🔄 **Transaction Log** | Timestamped, colour-coded log of every commit, rollback, and failure — the ADBMS proof page |
+| 📊 **Dashboard** | Live metric cards, area chart (stock over time), donut chart (stock by region), recent alerts feed |
 
 ---
 
-## Run locally
+## 🎓 ADBMS Concepts — where to see them
 
-### 1. Database
-Create a free PostgreSQL DB on [neon.tech](https://neon.tech) (or run Postgres locally).
-Grab the connection string and convert it to the async driver form:
+> This project was built as an **Advanced Database Management Systems** assignment to demonstrate real-world database engineering. Every concept is visible in the UI, not just in code.
+
+<table>
+<thead>
+<tr><th>Concept</th><th>Implementation</th><th>UI proof</th></tr>
+</thead>
+<tbody>
+<tr>
+<td><b>⚛️ ACID Transactions</b></td>
+<td><code>POST /inventory/batch-update</code> wraps all row updates in a single <code>async with db.begin()</code> block. Any failure triggers an automatic rollback of the entire batch.</td>
+<td><b>Inventory → Batch Update</b> — animated steps: <em>Acquiring locks → Executing → Committed / Rolled back</em><br/><b>Transaction Log</b> page shows duration, affected rows, and error message on rollback.</td>
+</tr>
+<tr>
+<td><b>🔔 Triggers</b></td>
+<td>Three PostgreSQL triggers on the <code>inventory</code> table:<br/>• <code>check_low_stock</code> — inserts an alert row when quantity drops at or below threshold<br/>• <code>resolve_low_stock_alert</code> — marks the alert RESOLVED when stock is replenished<br/>• <code>update_inventory_timestamp</code> — keeps <code>last_updated</code> accurate</td>
+<td><b>Alerts</b> page — every row is tagged <em>"Auto-generated by PostgreSQL trigger"</em>. Alerts appear the moment a batch update commits.</td>
+</tr>
+<tr>
+<td><b>🗂️ Table Partitioning</b></td>
+<td><code>warehouses</code> and <code>inventory</code> are both LIST-partitioned by <code>region</code> (NORTH / SOUTH / EAST / WEST / CENTRAL). Each region lives in its own physical child table.</td>
+<td><b>Warehouses</b> page — each row displays its physical partition name (e.g. <code>warehouses_north</code>). Query plans benefit from partition pruning.</td>
+</tr>
+<tr>
+<td><b>🔒 Concurrency Control</b></td>
+<td><code>SELECT … FOR UPDATE</code> in <code>services/transaction.py</code> acquires pessimistic row-level locks before any update. <code>POST /inventory/demo/concurrent-test</code> fires two conflicting transactions simultaneously.</td>
+<td><b>Inventory →</b> the 🧪 beaker button — watch one transaction commit while the other waits or fails, all shown in the Transaction Log in real time.</td>
+</tr>
+</tbody>
+</table>
+
+---
+
+## 🛠️ Tech stack
+
+<table>
+<tr>
+<td valign="top" width="33%">
+
+### Frontend
+- ⚛️ **React 18** + Vite
+- 🎨 **Tailwind CSS v3**
+- 🎞️ **Framer Motion** — page transitions, staggered cards, animated counters
+- 📈 **Recharts** — area & donut charts
+- 🗃️ **TanStack Table** — sortable, filterable data tables
+- 🐻 **Zustand** — auth state
+- 🌐 **Axios** — JWT interceptor
+
+</td>
+<td valign="top" width="33%">
+
+### Backend
+- ⚡ **FastAPI** 0.111
+- 🗄️ **SQLAlchemy 2.0** (async) + asyncpg
+- 🔐 **JWT** auth (python-jose + passlib)
+- 📦 **Pydantic v2** validation
+- 🔁 **Alembic** migrations
+- 🐍 Python 3.11
+
+</td>
+<td valign="top" width="33%">
+
+### Infrastructure
+- 🐘 **Neon.tech** — serverless PostgreSQL (free tier)
+- 🚀 **Render.com** — FastAPI web service (free tier, ~150 MB)
+- ▲ **Vercel** — React/Vite static deploy (free tier)
+
+</td>
+</tr>
+</table>
+
+---
+
+## 🚀 Run locally
+
+### Prerequisites
+- Python 3.11+
+- Node.js 18+
+- A PostgreSQL database — [Neon.tech](https://neon.tech) free tier works perfectly
+
+---
+
+### 1 · Database (Neon)
+
+1. Create a free project at [neon.tech](https://neon.tech)
+2. Copy the connection string and convert it to the async form:
+
 ```
 postgresql+asyncpg://USER:PASS@HOST/DB?ssl=require
 ```
 
-### 2. Backend  (Python 3.11 recommended — matches pinned requirements)
+---
+
+### 2 · Backend
+
 ```bash
 cd backend
-python3.11 -m venv .venv && source .venv/bin/activate
+
+# Create and activate a virtual environment
+python3.11 -m venv .venv
+source .venv/bin/activate          # Windows: .venv\Scripts\activate
+
+# Install dependencies (~150 MB)
 pip install -r requirements.txt
-cp .env.example .env          # then paste your DATABASE_URL
+
+# Configure environment
+cp .env.example .env
+# → paste your DATABASE_URL into .env
+
+# Start the server
 uvicorn app.main:app --reload --port 8000
 ```
-On first boot it auto-creates the schema (partitions + triggers), an `admin`
-user, and seeds demo data (`AUTO_INIT_DB` / `AUTO_SEED` in `.env`).
-API docs: http://localhost:8000/docs
 
+> **Auto-init:** On first boot with `AUTO_INIT_DB=true` and `AUTO_SEED=true` set in `.env`, the app creates the full schema (partitioned tables + all three triggers) and seeds realistic demo data automatically.
+>
 > To seed manually instead: `python seed_data.py`
 
-### 3. Frontend
+📖 Interactive API docs: [http://localhost:8000/docs](http://localhost:8000/docs)
+
+---
+
+### 3 · Frontend
+
 ```bash
 cd frontend
+
 npm install
-cp .env.example .env          # VITE_API_URL=http://localhost:8000
-npm run dev                   # http://localhost:5173
+
+cp .env.example .env
+# → set VITE_API_URL=http://localhost:8000
+
+npm run dev
+# → http://localhost:5173
 ```
-Login: **admin / admin123**
+
+**Login:** `admin` / `admin123`
 
 ---
 
-## Deploy (free tier)
+## ☁️ Deploy (all free tier)
 
-- **DB:** Neon project → copy `postgresql+asyncpg://…` string.
-- **Backend → Render:** New Web Service from `backend/` (uses `render.yaml`).
-  Set `DATABASE_URL`, `ADMIN_PASSWORD`, and `CORS_ORIGINS` (your Vercel URL).
-- **Frontend → Vercel:** Import `frontend/`, set `VITE_API_URL` to the Render URL.
+```
+Neon (PostgreSQL) ──→ Render (FastAPI) ──→ Vercel (React)
+```
+
+| Step | Service | What to do |
+|---|---|---|
+| **1** | [neon.tech](https://neon.tech) | Create project → copy `postgresql+asyncpg://…` connection string |
+| **2** | [render.com](https://render.com) | New Web Service → connect repo → root dir `backend/` → uses `render.yaml` · Set env vars: `DATABASE_URL`, `ADMIN_PASSWORD`, `CORS_ORIGINS` (your Vercel URL) |
+| **3** | [vercel.com](https://vercel.com) | Import repo → root dir `frontend/` · Set env var: `VITE_API_URL` = your Render URL |
+
+The `render.yaml` and `vercel.json` are pre-configured — no extra setup needed.
 
 ---
 
-## Key endpoints
+## 📡 API reference
 
 ```
+# Auth
 POST   /auth/login
-GET/POST/PUT/DELETE  /products
-GET/POST/PUT/DELETE  /suppliers
-GET/POST/PUT/DELETE  /warehouses
-GET/POST/DELETE      /inventory            GET /inventory/{warehouse_id}
-POST   /inventory/batch-update             ← ACID transaction (all-or-nothing)
-POST   /inventory/demo/concurrent-test     ← row-lock concurrency demo
-GET/POST /orders     POST /orders/{id}/fulfill     DELETE /orders/{id}
-GET    /alerts       PATCH /alerts/{id}/acknowledge
-GET    /analytics/dashboard | /stock-levels | /transaction-log
+
+# Products
+GET    /products
+POST   /products
+PUT    /products/{id}
+DELETE /products/{id}
+
+# Suppliers
+GET    /suppliers
+POST   /suppliers
+PUT    /suppliers/{id}
+DELETE /suppliers/{id}
+
+# Warehouses  (LIST-partitioned by region)
+GET    /warehouses
+POST   /warehouses
+PUT    /warehouses/{id}
+DELETE /warehouses/{id}
+
+# Inventory
+GET    /inventory
+GET    /inventory/{warehouse_id}
+POST   /inventory
+DELETE /inventory/{id}
+POST   /inventory/batch-update          ← ⚛️  ACID all-or-nothing transaction
+POST   /inventory/demo/concurrent-test  ← 🔒  row-lock concurrency demo
+
+# Orders
+GET    /orders
+POST   /orders
+POST   /orders/{id}/fulfill
+DELETE /orders/{id}
+
+# Alerts  (trigger-generated)
+GET    /alerts
+PATCH  /alerts/{id}/acknowledge
+
+# Analytics
+GET    /analytics/dashboard
+GET    /analytics/stock-levels
+GET    /analytics/transaction-log
 ```
+
+---
+
+## 📁 Project structure
+
+```
+trackos/
+├── backend/
+│   ├── app/
+│   │   ├── main.py              # FastAPI app, CORS, router registration
+│   │   ├── database.py          # Async SQLAlchemy engine (Neon)
+│   │   ├── models.py            # ORM models — partitioned tables defined here
+│   │   ├── schemas.py           # Pydantic v2 request / response models
+│   │   ├── auth.py              # JWT + bcrypt
+│   │   ├── routers/
+│   │   │   ├── products.py
+│   │   │   ├── warehouses.py
+│   │   │   ├── suppliers.py
+│   │   │   ├── inventory.py     # Batch-update ACID endpoint
+│   │   │   ├── orders.py
+│   │   │   ├── alerts.py
+│   │   │   └── analytics.py
+│   │   └── services/
+│   │       ├── transaction.py   # SELECT FOR UPDATE concurrency logic
+│   │       └── concurrency.py   # Concurrent-test simulator
+│   ├── sql/
+│   │   └── schema.sql           # Full DDL: partitions + all three triggers
+│   ├── seed_data.py
+│   ├── requirements.txt
+│   ├── render.yaml
+│   └── .env.example
+│
+└── frontend/
+    ├── src/
+    │   ├── pages/
+    │   │   ├── Dashboard.jsx        # Metric cards, charts, alerts feed
+    │   │   ├── Inventory.jsx        # Batch-update panel + transaction animation
+    │   │   ├── TransactionLog.jsx   # ADBMS proof page
+    │   │   ├── Warehouses.jsx       # Partition labels per row
+    │   │   ├── Orders.jsx
+    │   │   ├── Products.jsx
+    │   │   ├── Suppliers.jsx
+    │   │   └── Alerts.jsx
+    │   ├── components/
+    │   ├── hooks/
+    │   ├── api/
+    │   │   └── client.js            # Axios + JWT interceptor
+    │   └── store/
+    │       └── authStore.js         # Zustand
+    ├── tailwind.config.js
+    ├── vite.config.js
+    └── vercel.json
+```
+
+---
+
+## 🗄️ Database schema (overview)
+
+```sql
+-- LIST-partitioned by region
+warehouses          → warehouses_north / _south / _east / _west / _central
+inventory           → inventory_north  / _south / _east / _west / _central
+
+-- Core tables
+products            suppliers           orders
+order_items         low_stock_alerts    transaction_log
+
+-- Triggers on inventory
+check_low_stock             AFTER UPDATE  →  inserts alert when qty ≤ threshold
+resolve_low_stock_alert     AFTER UPDATE  →  resolves alert when qty > threshold
+update_inventory_timestamp  BEFORE UPDATE →  keeps last_updated current
+```
+
+Full DDL with triggers is in [`backend/sql/schema.sql`](backend/sql/schema.sql).
+
+---
+
+## 📄 License
+
+MIT © 2025 Armaan — built as an ADBMS course project at Chandigarh University.
