@@ -33,7 +33,8 @@
 
 <!-- VIDEO SECTION -->
 <!-- ═══════════════════════════════════════════════════════════════ -->
-<!--   📽️  REPLACE THE HREF AND SRC BELOW WITH YOUR VIDEO DETAILS  -->
+<img width="194" height="122" alt="1782835071056613" src="https://github.com/user-attachments/assets/8bc417c1-d5c3-4690-8cbe-b1cd3c141ba1" />
+
 <!-- ═══════════════════════════════════════════════════════════════ -->
 <a href="https://www.youtube.com/watch?v=YOUR_VIDEO_ID">
   <img src="https://img.shields.io/badge/▶%20Watch%20Demo-FF0000?style=for-the-badge&logo=youtube&logoColor=white" alt="Watch Demo" height="50"/>
