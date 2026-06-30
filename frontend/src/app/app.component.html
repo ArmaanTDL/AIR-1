@@ -1,0 +1,15 @@
+<!-- ============================================================
+     App Root Shell
+     Contains the persistent transition overlay that lives above
+     the <router-outlet> and survives route changes.
+     ============================================================ -->
+
+<!-- Cinematic Transition Overlay — covers the screen during route change -->
+<div
+  id="page-transition-overlay"
+  class="fixed inset-0 z-[9999] pointer-events-none"
+  style="opacity: 0; background: #FAF9F6;"
+></div>
+
+<!-- Angular Router viewport -->
+<router-outlet></router-outlet>

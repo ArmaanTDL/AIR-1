@@ -1,0 +1,82 @@
+<div class="animate-fadeIn">
+  <!-- Page Header -->
+  <div class="mb-6">
+    <h1 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
+      <svg class="w-6 h-6 text-cyan" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+      Alerts Feed
+    </h1>
+    <p class="text-sm text-slate-500">Database-triggered low stock warnings</p>
+  </div>
+
+  <!-- Alerts Table -->
+  <div class="glass overflow-hidden rounded-2xl">
+    <div class="overflow-x-auto">
+      <table class="w-full text-left text-sm">
+        <thead class="border-b border-slate-200 text-xs uppercase text-slate-500">
+          <tr>
+            <th class="px-4 py-3">Product Name</th>
+            <th class="px-4 py-3">Warehouse</th>
+            <th class="px-4 py-3 text-right">Quantity / Threshold</th>
+            <th class="px-4 py-3">Status</th>
+            <th class="px-4 py-3 text-right">Triggered At</th>
+            <th class="px-4 py-3 text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (a of alerts; track a.id) {
+            <tr class="border-b border-slate-100 hover:bg-slate-50 transition duration-150">
+              <td class="px-4 py-3 font-semibold text-slate-900">{{ a.product_name }}</td>
+              <td class="px-4 py-3 text-slate-700">
+                {{ a.warehouse_name }}
+                <span class="ml-1 rounded bg-violet/10 border border-violet/20 px-1.5 py-0.5 text-[10px] text-violet font-bold">
+                  {{ a.warehouse_region }}
+                </span>
+              </td>
+              <td class="px-4 py-3 text-right font-mono text-slate-700">
+                <span class="text-danger font-bold">{{ a.current_quantity }}</span> / {{ a.threshold }}
+              </td>
+              <td class="px-4 py-3">
+                @if (a.status === 'UNRESOLVED') {
+                  <span class="rounded bg-danger/10 border border-danger/20 px-2.5 py-0.5 text-xs text-danger font-semibold tracking-wide animate-pulse">
+                    {{ a.status }}
+                  </span>
+                } @else {
+                  <span class="rounded bg-emerald/10 border border-emerald/20 px-2.5 py-0.5 text-xs text-emerald font-semibold tracking-wide">
+                    {{ a.status }}
+                  </span>
+                }
+              </td>
+              <td class="px-4 py-3 text-right text-slate-500 text-xs font-mono">
+                {{ a.created_at | date:'short' }}
+              </td>
+              <td class="px-4 py-3 text-right">
+                @if (a.status === 'UNRESOLVED') {
+                  <button
+                    (click)="acknowledge(a.id)"
+                    class="rounded-lg px-2.5 py-1 text-xs font-bold bg-cyan/10 text-cyan border border-cyan/20 hover:bg-cyan/20 transition duration-150"
+                  >
+                    Acknowledge
+                  </button>
+                } @else {
+                  <span class="text-xs text-slate-450">Resolved</span>
+                }
+              </td>
+            </tr>
+          }
+          @if (alerts.length === 0 && !loading) {
+            <tr>
+              <td colSpan="6" class="px-4 py-10 text-center text-slate-500 font-medium">
+                No active stock alerts. All healthy ✨
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Loading indicator -->
+  <div *ngIf="loading" class="flex items-center justify-center py-20">
+    <div class="h-8 w-8 animate-spin rounded-full border-4 border-cyan/20 border-t-cyan"></div>
+  </div>
+</div>

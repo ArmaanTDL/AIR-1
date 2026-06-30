@@ -1,0 +1,176 @@
+<div class="animate-fadeIn">
+  <!-- Page Header -->
+  <div class="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+    <div>
+      <h1 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
+        <svg class="w-6 h-6 text-cyan" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+        Orders
+      </h1>
+      <p class="text-sm text-slate-500">{{ orders.length }} customer orders placed</p>
+    </div>
+    <button
+      (click)="openCreate()"
+      class="flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan to-violet px-4 py-2.5 text-sm font-semibold text-white shadow-glow hover:opacity-90 transition duration-300"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+      </svg>
+      Place Order
+    </button>
+  </div>
+
+  <!-- Search Bar -->
+  <div class="mb-4 flex items-center gap-2">
+    <div class="relative flex-1" style="max-width: 360px;">
+      <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+      </svg>
+      <input
+        placeholder="Search orders…"
+        [(ngModel)]="query"
+        class="!pl-9"
+      />
+    </div>
+  </div>
+
+  <!-- Orders Table -->
+  <div class="glass overflow-hidden rounded-2xl">
+    <div class="overflow-x-auto">
+      <table class="w-full text-left text-sm">
+        <thead class="border-b border-slate-200 text-xs uppercase text-slate-500">
+          <tr>
+            <th class="px-4 py-3">ID</th>
+            <th class="px-4 py-3">Customer</th>
+            <th class="px-4 py-3">Product</th>
+            <th class="px-4 py-3 text-right">Quantity</th>
+            <th class="px-4 py-3">Warehouse</th>
+            <th class="px-4 py-3">Status</th>
+            <th class="px-4 py-3 text-right">Order Date</th>
+            <th class="px-4 py-3 text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (o of getFilteredOrders(); track o.id) {
+            <tr class="border-b border-slate-100 hover:bg-slate-50 transition duration-150">
+              <td class="px-4 py-3 text-slate-500">#{{ o.id }}</td>
+              <td class="px-4 py-3 font-semibold text-slate-900">{{ o.customer_name }}</td>
+              <td class="px-4 py-3 text-slate-700">{{ o.product_name }}</td>
+              <td class="px-4 py-3 text-right font-bold text-slate-900">{{ o.quantity }}</td>
+              <td class="px-4 py-3 text-slate-600">
+                {{ o.warehouse_name }}
+                <span class="ml-1 rounded bg-violet/10 border border-violet/20 px-1.5 py-0.5 text-[10px] text-violet font-bold">
+                  {{ o.warehouse_region }}
+                </span>
+              </td>
+              <td class="px-4 py-3">
+                @if (o.status === 'PENDING') {
+                  <span class="rounded bg-amber/10 border border-amber/20 px-2.5 py-0.5 text-xs text-amber font-semibold tracking-wide">
+                    {{ o.status }}
+                  </span>
+                } @else {
+                  <span class="rounded bg-emerald/10 border border-emerald/20 px-2.5 py-0.5 text-xs text-emerald font-semibold tracking-wide">
+                    {{ o.status }}
+                  </span>
+                }
+              </td>
+              <td class="px-4 py-3 text-right text-slate-500 text-xs font-mono">
+                {{ o.created_at | date:'short' }}
+              </td>
+              <td class="px-4 py-3">
+                <div class="flex justify-end gap-1">
+                  <!-- Fulfill order button -->
+                  @if (o.status === 'PENDING') {
+                    <button
+                      (click)="fulfillOrder(o.id!)"
+                      title="Fulfill Order"
+                      class="rounded-lg px-2.5 py-1 text-xs font-bold bg-emerald/10 text-emerald border border-emerald/20 hover:bg-emerald/20 transition duration-150"
+                    >
+                      Fulfill
+                    </button>
+                  }
+                  <button
+                    (click)="deleteOrder(o.id!)"
+                    title="Cancel Order"
+                    class="rounded-lg p-2 text-slate-500 hover:bg-danger/10 hover:text-danger transition duration-150"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                    </svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+          @if (getFilteredOrders().length === 0 && !loading) {
+            <tr>
+              <td colSpan="8" class="px-4 py-10 text-center text-slate-500 font-medium">
+                No orders found.
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Loading indicator -->
+  <div *ngIf="loading" class="flex items-center justify-center py-20">
+    <div class="h-8 w-8 animate-spin rounded-full border-4 border-cyan/20 border-t-cyan"></div>
+  </div>
+
+  <!-- Place Order Modal Overlay -->
+  <div *ngIf="modalOpen" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fadeIn">
+    <div class="glass w-full max-w-md rounded-3xl p-6 shadow-2xl relative">
+      <h3 class="text-xl font-bold text-slate-900 mb-4">Place Customer Order</h3>
+      <button (click)="modalOpen = false" class="absolute top-4 right-4 text-slate-500 hover:text-slate-950 text-xl">&times;</button>
+      
+      <form (submit)="saveOrder($event)" class="space-y-4">
+        <div>
+          <label>Customer Name</label>
+          <input required placeholder="e.g. John Doe" [(ngModel)]="form.customer_name" name="customer_name" />
+        </div>
+
+        <div>
+          <label>Product (Game)</label>
+          <select [(ngModel)]="form.product_id" name="product_id">
+            @for (p of products; track p.id) {
+              <option [value]="p.id">{{ p.name }} (₹{{ p.unit_price }})</option>
+            }
+          </select>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label>Fulfill Server</label>
+            <select [(ngModel)]="form.warehouse_id" name="warehouse_id">
+              @for (w of warehouses; track w.id) {
+                <option [value]="w.id">{{ w.name }} ({{ w.region }})</option>
+              }
+            </select>
+          </div>
+          <div>
+            <label>Quantity</label>
+            <input type="number" required [(ngModel)]="form.quantity" name="quantity" min="1" />
+          </div>
+        </div>
+
+        <div class="flex justify-end gap-2 pt-4">
+          <button
+            type="button"
+            (click)="modalOpen = false"
+            class="px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100 rounded-xl transition duration-150"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            [disabled]="saving"
+            class="px-4 py-2 text-sm font-semibold bg-gradient-to-r from-cyan to-violet text-white rounded-xl shadow-glow disabled:opacity-60 transition duration-150"
+          >
+            {{ saving ? 'Placing…' : 'Place Order' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

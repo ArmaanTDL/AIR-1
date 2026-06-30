@@ -22,20 +22,22 @@ def _status(qty: int, threshold: int) -> str:
 
 async def _rows(db: AsyncSession, warehouse_id: int | None = None) -> list[InventoryRow]:
     stmt = (
-        select(Inventory, Product.name, Product.sku, Product.low_stock_threshold)
+        select(Inventory, Product.name, Product.sku, Product.low_stock_threshold, Warehouse.name)
         .join(Product, Product.id == Inventory.product_id)
+        .join(Warehouse, Warehouse.id == Inventory.warehouse_id)
         .order_by(Inventory.warehouse_id, Product.name)
     )
     if warehouse_id is not None:
         stmt = stmt.where(Inventory.warehouse_id == warehouse_id)
     result = await db.execute(stmt)
     rows: list[InventoryRow] = []
-    for inv, name, sku, threshold in result.all():
+    for inv, name, sku, threshold, wh_name in result.all():
         row = InventoryRow.model_validate(inv)
         row.product_name = name
         row.sku = sku
         row.threshold = threshold
         row.status = _status(inv.quantity, threshold)
+        row.warehouse_name = wh_name
         rows.append(row)
     return rows
 
@@ -90,6 +92,7 @@ async def create_inventory(
     row.sku = product.sku
     row.threshold = product.low_stock_threshold
     row.status = _status(inv.quantity, product.low_stock_threshold)
+    row.warehouse_name = warehouse.name
     return row
 
 

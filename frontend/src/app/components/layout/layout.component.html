@@ -1,0 +1,144 @@
+<!-- Animated particle backdrop -->
+<div class="air1-bg"></div>
+
+<!-- Toast notifications -->
+<div class="fixed right-4 top-4 z-50 flex flex-col gap-2 pointer-events-none">
+  @for (toast of toasts; track toast.id) {
+    <div
+      (click)="removeToast(toast.id)"
+      [ngClass]="toast.type === 'success' ? 'border-emerald/20 bg-emerald/10 text-emerald' : 'border-danger/20 bg-danger/10 text-danger'"
+      class="glass pointer-events-auto flex items-center justify-between gap-3 rounded-xl border px-4 py-3 shadow-lg cursor-pointer animate-fadeIn"
+      style="min-width: 260px;"
+    >
+      <div class="flex items-center gap-2">
+        @if (toast.type === 'success') {
+          <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+          </svg>
+        } @else {
+          <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
+          </svg>
+        }
+        <span class="text-sm font-medium">{{ toast.message }}</span>
+      </div>
+      <button class="text-slate-400 hover:text-slate-700">&times;</button>
+    </div>
+  }
+</div>
+
+<div class="flex min-h-screen">
+  <!-- Sidebar -->
+  <aside class="glass sticky top-0 hidden h-screen w-64 shrink-0 flex-col p-5 md:flex">
+    <div class="mb-8 flex items-center gap-2">
+      <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-cyan to-violet shadow-glow">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-white">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 13.5h3.86a2.25 2.25 0 0 1 2.008 1.24l.885 1.77a2.25 2.25 0 0 0 2.007 1.24h1.98a2.25 2.25 0 0 0 2.007-1.24l.885-1.77a2.25 2.25 0 0 1 2.007-1.24h3.86m-18 0h18" />
+        </svg>
+      </div>
+      <span class="text-xl font-black tracking-tight text-slate-900 flex items-center gap-1">
+        AIR <span class="text-violet font-bold">1</span>
+      </span>
+    </div>
+
+    <!-- Navigation links -->
+    <nav class="flex flex-1 flex-col gap-1">
+      @for (item of navItems; track item.to) {
+        <a
+          [routerLink]="item.to"
+          [routerLinkActiveOptions]="{ exact: item.end }"
+          routerLinkActive="bg-black text-white shadow-md"
+          class="group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-200/60 hover:text-slate-950 transition duration-150"
+        >
+          <!-- Dynamic Icons -->
+          @if (item.icon === 'LayoutDashboard') {
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>
+          } @else if (item.icon === 'Package') {
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-14L4 7m8 4v10M4 7v10l8 4" /></svg>
+          } @else if (item.icon === 'Factory') {
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
+          } @else if (item.icon === 'ClipboardList') {
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" /></svg>
+          } @else if (item.icon === 'ShoppingCart') {
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+          } @else if (item.icon === 'Handshake') {
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+          } @else if (item.icon === 'Siren') {
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+          } @else if (item.icon === 'Repeat') {
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 7.89H17.61" /></svg>
+          }
+
+          <span class="flex-1">{{ item.label }}</span>
+          
+          @if (item.badge && alertCount > 0) {
+            <span class="rounded-full bg-danger px-2 py-0.5 text-[10px] font-bold text-white animate-pulseDot">
+              {{ alertCount }}
+            </span>
+          }
+        </a>
+      }
+    </nav>
+
+    <div class="mt-4 border-t border-slate-200 pt-4 text-[11px] text-slate-500">
+      FSD Showcase · Angular · Standalone · Services · API
+    </div>
+  </aside>
+
+  <!-- Main viewport -->
+  <main class="flex-1 px-4 py-4 md:px-8 flex flex-col h-screen overflow-y-auto">
+    <!-- Top header bar -->
+    <header class="glass sticky top-0 z-30 mb-6 flex items-center justify-between rounded-2xl px-5 py-3 shrink-0">
+      <div class="relative hidden flex-1 items-center sm:flex">
+        <svg class="absolute left-3 w-4 h-4 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+        <input
+          placeholder="Search products, orders, SKUs…"
+          class="!pl-9 focus:border-cyan"
+          style="max-width: 420px;"
+        />
+      </div>
+      <div class="flex-1 sm:hidden"></div>
+
+      <div class="flex items-center gap-4">
+        <!-- Bell alerts icon -->
+        <div class="relative cursor-pointer" routerLink="/alerts">
+          <svg class="w-5 h-5 text-slate-500 hover:text-slate-900" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+          </svg>
+          @if (alertCount > 0) {
+            <span class="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-danger px-1 text-[10px] font-bold text-white">
+              {{ alertCount }}
+            </span>
+          }
+        </div>
+
+        <!-- User controls -->
+        <div class="flex items-center gap-3 pl-2 border-l border-slate-200">
+          <div class="text-right hidden sm:block">
+            <div class="text-sm font-semibold text-slate-800">{{ username || 'admin' }}</div>
+            <div class="text-[11px] text-slate-500">Operations</div>
+          </div>
+          <div class="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-violet to-cyan text-sm font-bold text-white">
+            {{ getInitial() }}
+          </div>
+          <button
+            (click)="logout()"
+            title="Log out"
+            class="rounded-lg p-2 text-slate-500 hover:bg-slate-100 hover:text-danger transition duration-200"
+          >
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Nested routes viewport -->
+    <div class="flex-1 w-full pb-8">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+</div>

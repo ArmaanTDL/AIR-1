@@ -1,9 +1,7 @@
-"""Seed NEXUS SUPPLY with realistic demo data.
+"""Seed NEXUS SUPPLY with realistic gaming demo data.
 
 Usage (standalone):  python seed_data.py
 Also imported by app.main on first startup when AUTO_SEED=true.
-
-Idempotent-ish: it only seeds when the products table is empty.
 """
 import asyncio
 import random
@@ -26,33 +24,40 @@ from app.models import (
 REGIONS = ["NORTH", "SOUTH", "EAST", "WEST", "CENTRAL"]
 
 WAREHOUSES = [
-    ("Delhi Distribution Hub", "NORTH", "Okhla Industrial Area, New Delhi"),
+    ("EU West Vault", "NORTH", "London Data Center, United Kingdom"),
     ("Chennai Coastal Depot", "SOUTH", "Ambattur, Chennai"),
-    ("Mumbai Port Warehouse", "WEST", "Bhiwandi, Mumbai"),
+    ("NA East Vault", "WEST", "Northern Virginia Data Center, USA"),
 ]
 
 SUPPLIERS = [
-    "Tata Logistics Pvt Ltd",
-    "Reliance Supply Chain",
-    "Mahindra Distributors",
+    "Bandai Namco Entertainment",
+    "CD Projekt Red",
+    "Valve Corporation",
+    "Rockstar Games",
+    "Nintendo",
 ]
 
 CATEGORIES = {
-    "Electronics": ["Wireless Mouse", "USB-C Hub"],
-    "Apparel": ["Cotton T-Shirt", "Denim Jeans"],
-    "Food & Beverage": ["Organic Coffee 1kg", "Green Tea 100pk"],
-    "Automotive": ["Brake Pads Set", "Engine Oil 4L"],
-    "Pharmaceuticals": ["Paracetamol 500mg", "Vitamin C 1000"],
+    "Action RPG": ["Elden Ring", "Dark Souls III", "The Witcher 3: Wild Hunt"],
+    "Action Sci-Fi": ["Cyberpunk 2077", "Deus Ex: Human Revolution"],
+    "Puzzle": ["Portal 2", "The Witness"],
+    "Sandbox": ["Minecraft", "Terraria"],
+    "Roguelike": ["Hades", "Dead Cells"],
 }
 
 
 async def seed() -> None:
     await init_db()
     async with AsyncSessionLocal() as db:
-        # Guard: only seed an empty catalog.
-        existing = (await db.execute(select(Product.id).limit(1))).first()
-        if existing:
-            return
+        # Clear existing tables to force fresh gaming seed
+        await db.execute(text("DELETE FROM low_stock_alerts;"))
+        await db.execute(text("DELETE FROM order_items;"))
+        await db.execute(text("DELETE FROM orders;"))
+        await db.execute(text("DELETE FROM inventory;"))
+        await db.execute(text("DELETE FROM products;"))
+        await db.execute(text("DELETE FROM warehouses;"))
+        await db.execute(text("DELETE FROM suppliers;"))
+        await db.commit()
 
         # Warehouses
         wh_objs = []
@@ -69,24 +74,24 @@ async def seed() -> None:
             slug = name.lower().split()[0]
             sup = Supplier(
                 name=name,
-                contact_email=f"sales@{slug}.co.in",
-                contact_phone=f"+91-{random.randint(70,99)}{random.randint(10000000,99999999)}",
-                reliability_score=Decimal(str(round(random.uniform(3.5, 5.0), 2))),
+                contact_email=f"publishing@{slug}.com",
+                contact_phone=f"+1-{random.randint(100,999)}-{random.randint(1000,9999)}",
+                reliability_score=Decimal(str(round(random.uniform(4.0, 5.0), 2))),
             )
             db.add(sup)
             sup_objs.append(sup)
         await db.flush()
 
-        # Products (50)
+        # Products (Games)
         prod_objs = []
         for category, names in CATEGORIES.items():
             for pname in names:
                 sup = random.choice(sup_objs)
                 product = Product(
-                    sku=f"{category[:3].upper()}-{uuid.uuid4().hex[:6].upper()}",
+                    sku=f"GAME-{uuid.uuid4().hex[:6].upper()}",
                     name=pname,
                     category=category,
-                    unit_price=Decimal(str(round(random.uniform(5, 500), 2))),
+                    unit_price=Decimal(str(round(random.uniform(299, 4999), 2))),
                     supplier_id=sup.id,
                     low_stock_threshold=random.choice([10, 15, 20, 25]),
                 )
@@ -94,12 +99,12 @@ async def seed() -> None:
                 prod_objs.append(product)
         await db.flush()
 
-        # Inventory: spread products across warehouses, some below threshold
+        # Inventory: spread games across warehouses, some below threshold
         inv_count = 0
         for product in prod_objs:
             chosen = random.sample(wh_objs, k=random.randint(1, 2))
             for wh in chosen:
-                # 25% chance to be at/below threshold so alerts trigger on first update
+                # 25% chance to be at/below threshold so alerts trigger
                 if random.random() < 0.25:
                     qty = random.randint(0, product.low_stock_threshold)
                 else:
@@ -121,7 +126,7 @@ async def seed() -> None:
             order = Order(
                 order_number=f"ORD-{uuid.uuid4().hex[:8].upper()}",
                 status=status,
-                notes=random.choice([None, "Priority customer", "Bulk order"]),
+                notes=random.choice([None, "Digital Delivery", "Pre-order key"]),
                 total_amount=0,
             )
             db.add(order)
@@ -130,7 +135,7 @@ async def seed() -> None:
             for _ in range(random.randint(1, 2)):
                 product = random.choice(prod_objs)
                 wh = random.choice(wh_objs)
-                qty = random.randint(1, 5)
+                qty = random.randint(1, 2)
                 total += product.unit_price * qty
                 db.add(
                     OrderItem(
@@ -146,9 +151,7 @@ async def seed() -> None:
 
         await db.commit()
 
-        # Generate alerts for currently-low inventory. An UPDATE that lists the
-        # quantity column fires `inventory_low_stock_trigger` even when the value
-        # is unchanged, so this populates low_stock_alerts via the DB trigger.
+        # Generate alerts for currently-low inventory via database trigger
         await db.execute(
             text(
                 "UPDATE inventory SET quantity = quantity + 0 "
@@ -157,8 +160,8 @@ async def seed() -> None:
             )
         )
         await db.commit()
-        print(f"Seeded: {len(wh_objs)} warehouses, {len(sup_objs)} suppliers, "
-              f"{len(prod_objs)} products, {inv_count} inventory rows, {len(statuses)} orders.")
+        print(f"Seeded Game Data: {len(wh_objs)} vaults, {len(sup_objs)} publishers, "
+              f"{len(prod_objs)} games, {inv_count} inventory keys, {len(statuses)} orders.")
 
 
 if __name__ == "__main__":

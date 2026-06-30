@@ -1,0 +1,78 @@
+<div class="animate-fadeIn">
+  <!-- Page Header -->
+  <div class="mb-6">
+    <h1 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
+      <svg class="w-6 h-6 text-cyan" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 7.89H17.61" /></svg>
+      Database Audit Logs
+    </h1>
+    <p class="text-sm text-slate-500">Database-triggered log of all changes</p>
+  </div>
+
+  <!-- Logs Table -->
+  <div class="glass overflow-hidden rounded-2xl">
+    <div class="overflow-x-auto">
+      <table class="w-full text-left text-sm">
+        <thead class="border-b border-slate-200 text-xs uppercase text-slate-500">
+          <tr>
+            <th class="px-4 py-3">Tx ID</th>
+            <th class="px-4 py-3">Op</th>
+            <th class="px-4 py-3">Table</th>
+            <th class="px-4 py-3">ID</th>
+            <th class="px-4 py-3">Details (Old vs New)</th>
+            <th class="px-4 py-3">User</th>
+            <th class="px-4 py-3 text-right">Timestamp</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (log of logs; track log.id) {
+            <tr class="border-b border-slate-100 hover:bg-slate-50 transition duration-150">
+              <td class="px-4 py-3 font-mono text-xs text-cyan truncate max-w-[100px]">{{ log.tx_id || '—' }}</td>
+              <td class="px-4 py-3">
+                <span
+                  [ngClass]="{
+                    'bg-emerald/10 text-emerald border border-emerald/20': log.operation_type === 'INSERT',
+                    'bg-cyan/10 text-cyan border border-cyan/20': log.operation_type === 'UPDATE',
+                    'bg-danger/10 text-danger border border-danger/20': log.operation_type === 'DELETE'
+                  }"
+                  class="rounded px-2 py-0.5 text-xs font-bold tracking-wide"
+                >
+                  {{ log.operation_type }}
+                </span>
+              </td>
+              <td class="px-4 py-3 text-slate-900 font-semibold">{{ log.table_name }}</td>
+              <td class="px-4 py-3 text-slate-500 font-mono text-xs">#{{ log.record_id }}</td>
+              <td class="px-4 py-3">
+                <div class="grid grid-cols-2 gap-4 text-[10px] font-mono p-2 bg-slate-50 border border-slate-200/60 rounded-lg max-w-lg overflow-x-auto">
+                  <div>
+                    <span class="text-[9px] text-slate-400 uppercase font-bold">Old</span>
+                    <pre class="text-slate-600 mt-1 whitespace-pre-wrap">{{ formatJson(log.old_data) }}</pre>
+                  </div>
+                  <div>
+                    <span class="text-[9px] text-slate-400 uppercase font-bold">New</span>
+                    <pre class="text-slate-800 mt-1 whitespace-pre-wrap">{{ formatJson(log.new_data) }}</pre>
+                  </div>
+                </div>
+              </td>
+              <td class="px-4 py-3 text-slate-500 text-xs">{{ log.performed_by || 'system' }}</td>
+              <td class="px-4 py-3 text-right text-slate-500 text-xs font-mono">
+                {{ log.created_at | date:'short' }}
+              </td>
+            </tr>
+          }
+          @if (logs.length === 0 && !loading) {
+            <tr>
+              <td colSpan="7" class="px-4 py-10 text-center text-slate-500 font-medium">
+                No database transaction logs found.
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Loading indicator -->
+  <div *ngIf="loading" class="flex items-center justify-center py-20">
+    <div class="h-8 w-8 animate-spin rounded-full border-4 border-cyan/20 border-t-cyan"></div>
+  </div>
+</div>

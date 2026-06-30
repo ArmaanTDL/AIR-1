@@ -111,6 +111,7 @@ class InventoryRow(BaseModel):
     sku: str | None = None
     threshold: int | None = None
     status: str | None = None  # HEALTHY | WARNING | CRITICAL
+    warehouse_name: str | None = None
 
 
 class InventoryCreate(BaseModel):

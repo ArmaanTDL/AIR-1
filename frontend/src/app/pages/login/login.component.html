@@ -1,0 +1,48 @@
+<div class="flex min-h-screen items-center justify-center p-4">
+  <div class="glass w-full max-w-md rounded-3xl p-8 shadow-glow-violet animate-fadeIn">
+    <div class="mb-8 flex flex-col items-center text-center">
+      <div class="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-black shadow-glow">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7 text-white">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 13.5h3.86a2.25 2.25 0 0 1 2.008 1.24l.885 1.77a2.25 2.25 0 0 0 2.007 1.24h1.98a2.25 2.25 0 0 0 2.007-1.24l.885-1.77a2.25 2.25 0 0 1 2.007-1.24h3.86m-18 0h18" />
+        </svg>
+      </div>
+      <h1 class="gradient-text text-3xl font-extrabold tracking-tight">AIR 1</h1>
+      <p class="mt-1 text-sm text-slate-400">
+        Intelligent Inventory &amp; Supply Chain Platform
+      </p>
+    </div>
+
+    <form [formGroup]="loginForm" (submit)="onSubmit($event)" class="space-y-4">
+      <div>
+        <label>Username</label>
+        <input formControlName="username" class="w-full"
+               [ngClass]="{ 'border-danger/50 focus:border-danger': username?.invalid && username?.touched }" />
+        @if (username?.invalid && username?.touched) {
+          <small class="text-xs text-danger mt-1 block">Username is required.</small>
+        }
+      </div>
+      <div>
+        <label>Password</label>
+        <input type="password" formControlName="password" class="w-full"
+               [ngClass]="{ 'border-danger/50 focus:border-danger': password?.invalid && password?.touched }" />
+        @if (password?.invalid && password?.touched) {
+          <small class="text-xs text-danger mt-1 block">Password is required.</small>
+        }
+      </div>
+      <button
+        type="submit"
+        [disabled]="loading"
+        class="flex w-full items-center justify-center gap-2 rounded-xl bg-black py-3 font-semibold text-white shadow-glow disabled:opacity-60 hover:bg-slate-900 transition duration-300"
+      >
+        <svg *ngIf="!loading" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75" />
+        </svg>
+        <span>{{ loading ? 'Signing in…' : 'Sign in' }}</span>
+      </button>
+    </form>
+
+    <p class="mt-6 text-center text-xs text-slate-500">
+      Demo credentials: <span class="text-cyan">admin / admin123</span>
+    </p>
+  </div>
+</div>
