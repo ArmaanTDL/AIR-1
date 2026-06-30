@@ -27,9 +27,6 @@ export class LandingComponent implements AfterViewInit, OnDestroy {
     { id: 'APAC', name: 'APAC South Key Vault (Singapore)', capacity: '30,000 keys', ping: '12.4ms', syncStatus: 'Synchronized', features: ['Geographic Key Redirection', 'Local Edge Caching', 'Ultra-Low Delay Distribution'] }
   ];
 
-  private lenis: any;
-  private animFrameId: number | null = null;
-
   constructor(
     public auth: AuthService,
     private router: Router,
@@ -155,24 +152,6 @@ export class LandingComponent implements AfterViewInit, OnDestroy {
       if (!gsap || !ScrollTrigger) { return; }
       gsap.registerPlugin(ScrollTrigger);
 
-      // ── 1. Initialize Lenis smooth scrolling ──
-      if (LenisClass) {
-        this.lenis = new LenisClass({
-          duration: 1.8,
-          easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-          smoothWheel: true,
-          wheelMultiplier: 1.2,
-        });
-        // Link Lenis → ScrollTrigger
-        this.lenis.on('scroll', ScrollTrigger.update);
-        // Drive Lenis via rAF
-        const raf = (time: number) => {
-          this.lenis.raf(time);
-          this.animFrameId = requestAnimationFrame(raf);
-        };
-        this.animFrameId = requestAnimationFrame(raf);
-      }
-
       // ── 2. Master pinned timeline ──
       const tl = gsap.timeline({
         scrollTrigger: {
@@ -271,12 +250,6 @@ export class LandingComponent implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.animFrameId) {
-      cancelAnimationFrame(this.animFrameId);
-    }
-    if (this.lenis) {
-      this.lenis.destroy();
-    }
     // Clean up all ScrollTriggers
     const ScrollTrigger = (window as any).ScrollTrigger;
     if (ScrollTrigger) {

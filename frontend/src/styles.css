@@ -6,22 +6,29 @@
   color-scheme: light;
 }
 
-html,
-body {
-  height: 100%;
-}
-
-body {
-  margin: 0;
-  background: #FAF9F6; /* Luxury Warm Alabaster Cream */
+/* Core Structural Cleanout for AIR 1 Engine Alignment */
+html, body {
+  background-color: #FAF9F6; /* Luxury Warm Alabaster Cream */
   color: #1E1E24; /* Rich Charcoal Black */
-  font-family: "Inter", system-ui, sans-serif;
-  -webkit-font-smoothing: antialiased;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  
+  /* CRITICAL: Must be auto to prevent choppy dual-rendering behaviors with Lenis */
+  scroll-behavior: auto !important; 
 }
 
-/* Smooth Scrolling */
-html {
-  scroll-behavior: smooth;
+/* Ensure no elements block the inner viewport scrolling mechanisms */
+body {
+  position: relative;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+/* Stop components using absolute height metrics that squash responsive dashboard blocks */
+.dashboard-viewport-fix {
+  min-height: 100vh;
+  height: auto !important;
 }
 
 /* Animated particle-grid backdrop with Warm Cream/Beige glows */

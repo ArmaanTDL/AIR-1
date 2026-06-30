@@ -6,7 +6,9 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ApiService {
-  private baseUrl = 'http://localhost:8000';
+  private baseUrl = typeof window !== 'undefined' && window.location.hostname === 'localhost'
+    ? 'http://localhost:8000'
+    : 'https://trackos-xk3q.onrender.com';
 
   constructor(private http: HttpClient) {}
 
