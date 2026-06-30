@@ -1,105 +1,245 @@
 <div align="center">
-  <h1>AIR 1 — Key Vault System</h1>
-  <p>A Premium, High-Performance Game Key Distribution Platform</p>
 
-  <!-- VIDEO PLACEHOLDER: Replace the href and src with your actual video link -->
-  <a href="https://your-video-link.com">
-    <img src="https://img.youtube.com/vi/YOUR_VIDEO_ID/maxresdefault.jpg" alt="AIR 1 Video Walkthrough" width="800"/>
-  </a>
-  <p><i>Click the image above to watch the AIR 1 platform in action!</i></p>
+<br/>
+
+<!-- HERO BANNER -->
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=0,2,2,5,30&height=200&section=header&text=AIR%201&fontSize=90&fontAlignY=35&desc=Key%20Vault%20System&descAlignY=60&descSize=22&fontColor=FFFFFF&animation=fadeIn"/>
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=0,2,2,5,30&height=200&section=header&text=AIR%201&fontSize=90&fontAlignY=35&desc=Key%20Vault%20System&descAlignY=60&descSize=22&fontColor=FFFFFF&animation=fadeIn" alt="AIR 1 Banner" width="100%"/>
+</picture>
+
+<br/>
+
+<!-- TAGLINE -->
+<h3>
+  <samp>〔 A Premium, Cinematic Game Key Distribution Platform 〕</samp>
+</h3>
+
+<br/>
+
+<!-- LIVE BADGES -->
+<a href="https://github.com/ArmaanTDL/AIR-1---"><img src="https://img.shields.io/badge/Status-Live-brightgreen?style=for-the-badge&logo=statuspage&logoColor=white" alt="Status"/></a>
+&nbsp;
+<a href="https://github.com/ArmaanTDL/AIR-1---"><img src="https://img.shields.io/badge/Angular-18-DD0031?style=for-the-badge&logo=angular&logoColor=white" alt="Angular"/></a>
+&nbsp;
+<a href="https://github.com/ArmaanTDL/AIR-1---"><img src="https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi&logoColor=white" alt="FastAPI"/></a>
+&nbsp;
+<a href="https://github.com/ArmaanTDL/AIR-1---"><img src="https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL"/></a>
+&nbsp;
+<a href="https://github.com/ArmaanTDL/AIR-1---"><img src="https://img.shields.io/badge/GSAP-88CE02?style=for-the-badge&logo=greensock&logoColor=black" alt="GSAP"/></a>
+
+<br/><br/>
+
+<!-- VIDEO SECTION -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!--   📽️  REPLACE THE HREF AND SRC BELOW WITH YOUR VIDEO DETAILS  -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<a href="https://www.youtube.com/watch?v=YOUR_VIDEO_ID">
+  <img src="https://img.shields.io/badge/▶%20Watch%20Demo-FF0000?style=for-the-badge&logo=youtube&logoColor=white" alt="Watch Demo" height="50"/>
+</a>
+
+<br/>
+
+> **💡 To add your own video:** Replace `YOUR_VIDEO_ID` above with your YouTube video ID.
+> Then paste a thumbnail image from your video directly below this section.
+
+<br/>
+
+<!-- PUT YOUR PROJECT SCREENSHOT OR VIDEO THUMBNAIL HERE -->
+<!-- Example: <img src="your-screenshot-url" alt="AIR 1 Dashboard Preview" width="90%"/> -->
+
+---
+
 </div>
 
----
+## ✦ What is AIR 1?
 
-## 🌟 Overview
+**AIR 1** is a high-end, full-stack **Game Key Distribution & Inventory Management Platform**. It was built to showcase a deep command of modern web engineering — combining a cinematic, Apple-style interactive frontend with a battle-hardened, asynchronous Python backend and an ACID-compliant PostgreSQL database.
 
-**AIR 1** is a high-end, full-stack game key inventory dashboard and distribution platform. Built with a focus on **premium aesthetics** (cinematic GSAP scroll animations, glassmorphism, monochrome cream/black palettes) and **high-performance engineering** (Angular 18, FastAPI, PostgreSQL).
-
-It features a kinetic, Apple-style interactive landing page that seamlessly transitions into a powerful, data-rich management console.
-
-## ✨ Features
-
-- **Cinematic Landing Page:** Hardware-accelerated GSAP animations, ScrollTrigger zoom scaling, and Lenis smooth scrolling.
-- **Premium Dashboard Console:** Glassmorphism UI, real-time metric cards, and a synchronized page-transition experience.
-- **ACID-Compliant Inventory:** Row-level locking and atomic batch updates via PostgreSQL to prevent overselling of digital keys.
-- **Asynchronous Architecture:** Built on FastAPI with `asyncpg` for high-throughput concurrency.
-- **Modular Angular 18 Frontend:** Utilizes Standalone Components, RxJS data streams, and robust HTTP interceptors.
+The design philosophy is rooted in **premium minimalism** — warm cream tones, stark black typography, and scroll-bound kinetic animations that feel buttery and organic on every display.
 
 ---
 
-## 🛠 Tech Stack
+## ✦ Experience Preview
 
-- **Frontend:** Angular 18 (Standalone), Tailwind CSS, GSAP, Lenis
-- **Backend:** Python 3.11, FastAPI, SQLAlchemy 2.0 (Async)
-- **Database:** PostgreSQL (Neon.tech or local)
-- **Authentication:** JWT (JSON Web Tokens)
+| | |
+|:---:|:---:|
+| **Interactive Landing Page** | **Command Center Dashboard** |
+| Cinematic GSAP scroll animations with Lenis smooth-scrolling, split-letter convergence, and video background | Real-time metric cards, ACID-compliant inventory tables, stock distribution charts, and live alert feeds |
+| **Game Vault Catalog** | **Secure API Console** |
+| Seeded with real gaming titles (Elden Ring, Cyberpunk 2077, Portal 2) with key distribution specs | JWT-authenticated FastAPI backend with interactive Swagger docs at `/docs` |
 
 ---
 
-## 🚀 Local Development Guide
+## ✦ Tech Stack
 
-### 1. Database Setup
-Create a free PostgreSQL database on [neon.tech](https://neon.tech) (or run it locally).
-Convert your connection string to the `asyncpg` format:
+<table>
+  <tr>
+    <td valign="top" width="33%">
+
+### Frontend
+- **Angular 18** — Standalone Components
+- **Tailwind CSS** — Utility-First Styling
+- **GSAP + ScrollTrigger** — Cinematic Animations
+- **Lenis** — Buttery Smooth Scrolling
+- **RxJS** — Reactive Data Streams
+- **TypeScript** — Type Safety
+
+    </td>
+    <td valign="top" width="33%">
+
+### Backend
+- **FastAPI** — High-performance API
+- **SQLAlchemy 2.0** — Async ORM
+- **asyncpg** — Fast PostgreSQL Driver
+- **JWT** — Secure Authentication
+- **Pydantic** — Data Validation
+- **Uvicorn** — ASGI Server
+
+    </td>
+    <td valign="top" width="33%">
+
+### Infrastructure
+- **PostgreSQL** — ACID Transactions
+- **Neon.tech** — Serverless Postgres
+- **Render** — Backend Hosting
+- **Vercel** — Frontend Hosting
+- **List Partitioning** — Regional Key Vaults
+- **Row-Level Locking** — No Overselling
+
+    </td>
+  </tr>
+</table>
+
+---
+
+## ✦ Architecture Highlights
+
 ```
-postgresql+asyncpg://USER:PASS@HOST/DB?ssl=require
+AIR 1 Platform
+│
+├── 🎬 Landing Page         GSAP timeline, Lenis scroll, split-letter
+│   ├── Phase A: Letter Convergence (A I R → AIR)
+│   ├── Phase B: Logo Flight & Dock (top-left corner)
+│   └── Phase C: Header Reveal + Hero Content Fade-In
+│
+├── 🔐 Auth Guard           JWT token validation on protected routes
+│
+└── 🖥️  Console Dashboard
+    ├── /console             Command Center (Live metrics, charts)
+    ├── /console/products    Game Catalog (11+ games seeded)
+    ├── /console/inventory   Regional Key Vaults (NORTH/SOUTH/EAST/WEST)
+    ├── /console/orders      Order fulfillment pipeline
+    ├── /console/suppliers   Publisher management
+    ├── /console/warehouses  Vault partition management
+    ├── /console/alerts      Live low-stock alert feed
+    └── /console/transactions Audit trail log
 ```
 
-### 2. Backend Setup
+---
+
+## ✦ Live Deployment Guide
+
+> **Everything below can be deployed for FREE using these 3 platforms.**
+
+### 1️⃣ Database → Neon.tech
+```
+1. Sign up at https://neon.tech
+2. Create a new project called "AIR-1"
+3. Copy your connection string and convert it:
+   postgresql+asyncpg://USER:PASS@HOST/DB?ssl=require
+```
+
+### 2️⃣ Backend → Render.com
+```
+1. Go to https://render.com → New Web Service
+2. Connect your GitHub repo
+3. Set Root Directory to: backend
+4. Build Command: pip install -r requirements.txt
+5. Start Command: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+
+Environment Variables:
+  DATABASE_URL = postgresql+asyncpg://...  (from Neon)
+  SECRET_KEY   = any_long_random_string
+```
+> ✅ Render will give you a live URL: `https://air-1-backend.onrender.com`
+
+### 3️⃣ Frontend → Vercel
+```
+1. Go to https://vercel.com → Add New Project
+2. Import your GitHub repository
+3. Set Root Directory to: frontend
+4. Framework will auto-detect as Angular
+5. Click Deploy
+```
+> ✅ Vercel will give you a live URL: `https://air-1.vercel.app`
+
+---
+
+## ✦ Run Locally
+
 ```bash
+# 1. Clone the repository
+git clone https://github.com/ArmaanTDL/AIR-1---.git
+cd AIR-1---
+
+# 2. Backend setup
 cd backend
-python3.11 -m venv .venv 
-source .venv/bin/activate
+python3.11 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
-
-# Create your .env file and paste your DATABASE_URL
-cp .env.example .env          
-
-# Run the server
+cp .env.example .env         # Add your DATABASE_URL here
 uvicorn app.main:app --reload --port 8000
-```
-*Note: On first boot, the system automatically creates the schema, seeds the database with games (Elden Ring, Cyberpunk, etc.), and creates an `admin` user.*
 
-### 3. Frontend Setup
-```bash
+# 3. Frontend setup (new terminal)
 cd frontend
 npm install
 npm run dev
 ```
-Navigate to `http://localhost:5173`. 
-**Default Login:** `admin` / `admin123`
+
+| Credential | Value |
+|:-----------|:------|
+| URL | `http://localhost:5173` |
+| Username | `admin` |
+| Password | `admin123` |
+| API Docs | `http://localhost:8000/docs` |
 
 ---
 
-## 🌍 How to Deploy (Live Link)
+## ✦ Key API Endpoints
 
-To get a live, public link for your project, you need to deploy the Database, Backend, and Frontend separately:
-
-### Step 1: Database (Neon.tech)
-1. Go to [Neon.tech](https://neon.tech) and create a free PostgreSQL project.
-2. Copy the connection string.
-
-### Step 2: Backend (Render.com)
-1. Push this repository to your GitHub.
-2. Go to [Render.com](https://render.com) and create a new **Web Service**.
-3. Connect your GitHub repository.
-4. Set the build command to: `pip install -r requirements.txt`
-5. Set the start command to: `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
-6. In the Environment Variables section, add your `DATABASE_URL` (using the `postgresql+asyncpg://` format) and your JWT `SECRET_KEY`.
-
-### Step 3: Frontend (Netlify)
-1. Go to [Netlify.com](https://netlify.com) and click **Add new site > Import an existing project**.
-2. Connect your GitHub repository.
-3. Configure the build settings:
-   - **Base directory:** `frontend`
-   - **Build command:** `npm run build`
-   - **Publish directory:** `frontend/dist/frontend` (or `frontend/dist` depending on Angular output)
-4. Add an Environment Variable for your backend API URL so the frontend knows where to fetch data (e.g., `API_URL = https://your-backend-url.onrender.com`).
-5. Click **Deploy Site**.
-
-Once Netlify finishes building, you will have a live public URL for your AIR 1 platform!
+| Method | Endpoint | Description |
+|:-------|:---------|:------------|
+| `POST` | `/auth/login` | JWT Login |
+| `GET/POST` | `/products` | Game catalog |
+| `GET/POST` | `/inventory` | Key vault inventory |
+| `POST` | `/inventory/batch-update` | Atomic ACID batch update |
+| `GET/POST` | `/orders` | Order pipeline |
+| `GET` | `/analytics/dashboard` | Real-time metrics |
+| `GET` | `/analytics/stock-levels` | Stock by region |
+| `GET` | `/analytics/transaction-log` | Full audit trail |
 
 ---
 
-## 📄 License
-Demonstration purposes only.
+## ✦ FSD Showcase Parameters
+
+This project was built to demonstrate all five FSD modules:
+
+| # | Module | Demonstrated By |
+|:--|:-------|:----------------|
+| **1** | Modular Layout & Styling | Angular standalone components, Tailwind, glassmorphism |
+| **2** | Interpolation & Data Binding | `{{ }}`, `[property]`, `(event)`, `[(ngModel)]` throughout all pages |
+| **3** | Services & Dependency Injection | 10+ injectable services (Auth, Product, Inventory, Toast, Transition...) |
+| **4** | Routing & Guards | SPA navigation, `routerLink`, `<router-outlet>`, `authGuard` |
+| **5** | Async API Integration | FastAPI + SQLAlchemy async, JWT, HTTP interceptors, RxJS streams |
+
+---
+
+<div align="center">
+
+<br/>
+
+<img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=0,2,2,5,30&height=100&section=footer&animation=fadeIn" width="100%"/>
+
+<sub>Built with 🖤 by <a href="https://github.com/ArmaanTDL">ArmaanTDL</a> · AIR 1 Key Vault System © 2026</sub>
+
+</div>
