@@ -18,8 +18,9 @@
 <br/>
 
 <!-- LIVE BADGES -->
-<a href="https://github.com/ArmaanTDL/AIR-1---"><img src="https://img.shields.io/badge/Status-Live-brightgreen?style=for-the-badge&logo=statuspage&logoColor=white" alt="Status"/></a>
-&nbsp;
+<a href="https://air-1-rosy.vercel.app/" target="_blank">
+  <img src="https://img.shields.io/badge/Status-Live-brightgreen?style=for-the-badge&logo=statuspage&logoColor=white" alt="Status"/>
+</a>
 <a href="https://github.com/ArmaanTDL/AIR-1---"><img src="https://img.shields.io/badge/Angular-18-DD0031?style=for-the-badge&logo=angular&logoColor=white" alt="Angular"/></a>
 &nbsp;
 <a href="https://github.com/ArmaanTDL/AIR-1---"><img src="https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi&logoColor=white" alt="FastAPI"/></a>
